@@ -12,6 +12,8 @@ class _PriceScreenState extends State<PriceScreen> {
 
   String selectedCurrency;
 
+  String rate;
+
   @override
   void initState() {
     super.initState();
@@ -19,14 +21,12 @@ class _PriceScreenState extends State<PriceScreen> {
     _currencyList = [];
     _getCurrencyList();
   }
-  
 
-  void _getCurrencyList(){
-
+  void _getCurrencyList() {
     //by using foreach loop
-    for(String currency in _mockController.getCurrencies()){
+    for (String currency in _mockController.getCurrencies()) {
       var newItem = DropdownMenuItem(
-          child: Text(currency),
+        child: Text(currency),
         value: currency,
       );
       _currencyList.add(newItem);
@@ -40,6 +40,7 @@ class _PriceScreenState extends State<PriceScreen> {
       );
     }).toList();*/
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +62,9 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 USD = ? BDT',
+                  rate != null
+                      ? "1 USD = ${rate} ${selectedCurrency}"
+                      : '1 USD = ? BDT',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -80,21 +83,21 @@ class _PriceScreenState extends State<PriceScreen> {
               hint: Center(
                 child: Text(
                   'Select',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                 ),
               ),
               isExpanded: false,
               value: selectedCurrency,
-              onChanged: (value){
+              onChanged: (value) async {
+                MockController mock = MockController();
+                var price = await mock.getPriceByCoin(selectedCurrency);
+
                 setState(() {
                   selectedCurrency = value;
+                  rate = price.rate.toStringAsFixed(2);
                 });
               },
               items: _currencyList,
-
             ),
           ),
         ],
