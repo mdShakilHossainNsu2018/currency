@@ -16,3 +16,5 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 https://rest.coinapi.io/v1/exchangerate/BTC/USD
+
+![](docs/Screenshot 2022-08-04 at 1.14.54 AM.png)
